@@ -14,8 +14,10 @@ async function refreshingAccessToken(token) {
         return {
             ...token,
             accessToken: refreshedToken.access_token,
-            accessTokenExpires: Date.now + refreshedToken.expires_in * 1000 // = 1 hour as 3600 returns from Spotify API
-        }
+            accessTokenExpires: Date.now + refreshedToken.expires_in * 1000, // = 1 hour as 3600 returns from Spotify API
+            refreshToken: refreshedToken.refresh_token ?? token.refreshToken,
+            // Replace if new one came back else fall back to old refresh token
+        };
 
     } catch (error) {
         console.error(error);
@@ -56,12 +58,21 @@ export default NextAuth({
         }
 
         if (Date.now() < token.accessTokenExpires) {
+            console.log("EXISTING ACCESS TOKEN IS VALID");
             return token;
         }
 
         // Access expired, so new to refresh
         console.log("ACCESS TOKEN HAS EXPIRED, REFRESHING...");
         return await refreshingAccessToken(token)
+      },
+
+      session({ session, token }) {
+          session.user.accessToken = token.accessToken;
+          session.user.refreshToken = token.refreshToken;
+          session.user.username = token.username;
+
+          return session;
       },
   },
 });
