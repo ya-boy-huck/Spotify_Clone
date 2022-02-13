@@ -7,9 +7,11 @@ import {
     PlusCircleIcon,
 } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
+import { useState } from "react";
 
 function Sidebar() {
     const { data: session, status } = useSession();
+    const [playlists, setPlaylists] = useState([]);
 
     console.log(session);
   return (
