@@ -7,25 +7,25 @@ import {
     PlusCircleIcon,
 } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 
 function Sidebar() {
-    const spotifyApi = useSpotify();
+    //const spotifyApi = useSpotify();
     const { data: session, status } = useSession();
-    const [playlists, setPlaylists] = useState([]);
-    const [playlistId, setPlaylistId] = useState(null);
+    //const [playlists, setPlaylists] = useState([]);
+    //const [playlistId, setPlaylistId] = useState(null);
 
-    console.log("You picked playlist >>>", playlistId);
+   // console.log("You picked playlist >>>", playlistId);
 
-    useEffect(() => {
-        if (spotifyApi.getAccessToken()) {
-            spotifyApi.getUserPlaylists().then((data) => {
-                setPlaylists(data.body.items);
-            });
-        }
+    //useEffect(() => {
+       // if (spotifyApi.getAccessToken()) {
+           // spotifyApi.getUserPlaylists().then((data) => {
+               // setPlaylists(data.body.items);
+           // });
+       // }
 
-    }, [session, spotifyApi])
-    console.log(playlists);
+   // }, [session, spotifyApi])
+    //console.log(playlists);
 
     console.log(session);
   return (
@@ -33,13 +33,11 @@ function Sidebar() {
         border-gray-900 overflow-y-scroll scrollbar-hide h-screen">
             <div className="space-y-4">
             <button className="flex items-center space-x-2
-                hover:text-white">
-                    <HomeIcon className="h-5 w-5"/>
+                hover:text-white" onClick={() => signOut()}>
                     <p>Log Out</p>
                 </button>
                 <button className="flex items-center space-x-2
                 hover:text-white"
-                onClick={() => signOut()}
                 >
                     <HomeIcon className="h-5 w-5"/>
                     <p>Home</p>
@@ -74,12 +72,6 @@ function Sidebar() {
                 <hr className="border-t-[0.1px] border-gray-900"/>
 
                 {/* playlist */}
-                {playlists.map((playlist) => (
-                    <p key={playlist.id}
-                    onClick={() => setPlaylistId(playlist.id)}
-                    className="cursor-pointer hover:text-white">
-                    {playlist.name}</p>
-                ))};
             </div>
         </div>
     )
