@@ -2,6 +2,10 @@ import { ChevronDownIcon } from "@heroicons/react/outline";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { shuffle } from "lodash";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { playlistIdState, playlistState } from "../atoms/playlistAtoms";
+import spotifyApi from "../lib/spotify";
+import useSpotify from "../hooks/useSpotify";
 
 const colors = [
     "from-indigo-500",
@@ -15,11 +19,21 @@ const colors = [
 
 function Center() {
     const { data: session } = useSession();
+    const spotifyApi = useSpotify();
     const [color, setColor] = useState(null);
+    const playlistId = useRecoilValue(playlistIdState);
+    const [playlist, setPlaylist] = useRecoilState(playlistState);
 
     useEffect (() => {
         setColor(shuffle(colors).pop())
-    }, [])
+    }, [playlistId]);
+
+    useEffect(() =>{
+        spotifyApi.getPlaylist(playlistId).then((data) =>{
+            setPlaylist(data.body);
+        })
+            .catch((err) => console.log("Something went wrong", err));
+    }, [spotifyApi, playlistId]);
 
     return (
         <div className="flex-grow text-white">
