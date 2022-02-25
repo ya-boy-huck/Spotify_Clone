@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { shuffle } from "lodash";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { playlistIdState, playlistState } from "../atoms/playlistAtoms";
+import Songs from "../components/Songs";
 import spotifyApi from "../lib/spotify";
 import useSpotify from "../hooks/useSpotify";
 
@@ -50,8 +51,23 @@ function Center() {
             </header>
             <section className={`flex items-end space-x-7 bg-gradient-to-b 
             to-black ${color} h-80 text-white padding-8`}>
-
+                <img 
+                    className="h-44 w-44 shadow-2xl" 
+                    src={playlist?.images?.[0]?.url} 
+                    alt="" 
+                />
+                <div>
+                    <p>Playlist</p>
+                    <h1 
+                        className="text-2xl md:text-3xl xl:text-5xl font-bold">
+                        {playlist?.name}
+                    </h1>
+                </div>
             </section>
+            <div>
+                <Songs />
+            </div>
+
         </div>
     );
 }
